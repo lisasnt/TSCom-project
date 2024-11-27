@@ -28,4 +28,4 @@ void loop() {
     Serial.println("IMU sensor tilit " + String(IMU_tilt) + "degrees");
 
     delay(1000);
-}
+ti}
