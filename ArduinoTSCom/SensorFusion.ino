@@ -5,35 +5,28 @@ float tiltComp(distance, angle){
     return distance * cos(angle);
 }
 
-int colorDetect(Ultra_sound_dsitance, infrared_measurment){
+float colorDetect(v_infra, d_ultra){
     /*
-        Based on the measurment from the Ultra Sound, we want to figure out what color best represents the infrared_measurment
-        Alternatively; Have user place the measured object in a fixed distance to callibrate the sensor. (Recomended by teacher)
+        Finds the color and returns the offset corresponding to that color.
     */
 }
 
-float colorComp(v_infra, d_ultra, d_ultra_treshold, v_infra_treshold, &color_comp){
-    /*
-        Need curves for different color(Teacher reccomended like 3)
-        Use the curves to predict distance based on recived voltage
-    */
 
+float infraDistance(v_infra, infra_treshold, d_ultra, ultra_treshold){
     if(d_ultra < d_ultra_treshold){
-        Serial.print("Warning: Infrared is not calibrated correclty due to distance to object being to short.")
+        Serial.print("Warning: Infrared is not calibrated correclty due to distance to object being to short.");
+        return 0;
     }else if(v_infra < v_infra_treshold){
-        Serial.print("Warning: Infrared is not calibrated correclty due recvied signal is to weak.")
+        Serial.print("Warning: Infrared is not calibrated correclty due recvied signal is to weak.");
+        return 0;
     }else{
-        return color_comp
+        return measurmentToDistance(v_ultra) + colorDetect(v_infra, d_ultra);
     }
-
 }
 
-float predDistance(d_ultra, d_infra, w_utlra, w_infra){
+float measurmentToDistance(v_infra){
     /*
-        Create a system for weighing the differnet measurments
-        Idea(Not necceceraly optimal): Find probability of each measurment being the right one, and find expected value based on this
+        Should transform v_infra to d_infra
     */
-
-    return w_ultra*d_ultra-w_infra*d_infra/(w_ultra + w_infra);
-
+    return 0;
 }

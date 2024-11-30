@@ -7,6 +7,7 @@
 
 #include "UltrasonicSensor.h"
 #include "IMUSensor.h"
+#include "SensorFusion.h"
 
 #define ULTR_TRIG_PIN 8
 #define ULTR_ECHO_PIN 10
@@ -21,11 +22,14 @@ void setup() {
 }
 
 void loop() {
-    float ultr_distance = ultrasonicSensor.getDistance();
-    //Serial.println("Ultrasonic sensor distance: " + String(ultr_distance) + " cm");
+    float d_ultra = ultrasonicSensor.getDistance();
+    Serial.println("Ultrasonic sensor distance: " + String(d_ultra) + " cm");
 
     float IMU_tilt = IMU.getTilt();
-    Serial.println("IMU sensor tilit " + String(IMU_tilt) + "degrees");
+    Serial.println("Tilit angle: " + String(IMU_tilt) + "degrees");
+
+    float d_ultra_comp = tiltComp(d_ultra, IMU_tilt);
+    Serial.println("Angle compensated ultrasonic distance: " + String(d_ultra_comp) + " cm");
 
     delay(1000);
 ti}
