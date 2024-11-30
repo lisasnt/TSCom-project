@@ -12,7 +12,7 @@ float colorDetect(v_infra, d_ultra){
 }
 
 
-float infraDistance(v_infra, infra_treshold, d_ultra, ultra_treshold){
+float infraToDistance(v_infra, infra_treshold, d_ultra, ultra_treshold){
     if(d_ultra < d_ultra_treshold){
         Serial.print("Warning: Infrared is not calibrated correclty due to distance to object being to short.");
         return 0;
@@ -29,4 +29,10 @@ float measurmentToDistance(v_infra){
         Should transform v_infra to d_infra
     */
     return 0;
+}
+
+float distanceComb(d_ultra, d_infra){
+    /*
+        Preform sesnor fusion on the data, probably gonna use weighted average of some sort.
+    */
 }
