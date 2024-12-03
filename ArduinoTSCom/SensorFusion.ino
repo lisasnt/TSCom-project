@@ -28,7 +28,10 @@ float measurmentToDistance(float v_infra){
     /*
         Should transform v_infra to d_infra
     */
-    return 1.58796880e-02*x + -1.09140410e-05*x**2 + 6.42136562e-01*(1/(white_list+1.6)*1000)**2 -5.55773930575693;
+        return 1.55058830e-02 * v_infra 
+           -1.07071156e-05 * pow(v_infra, 2) 
+           + 6.27489604e-01 * pow((1 / (v_infra) )* 1000, 2) 
+           -5.377095188616198;
 }
 
 /*

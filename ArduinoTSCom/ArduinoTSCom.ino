@@ -29,20 +29,17 @@ void loop() {
         Many of the functions bellow return floats, should be changed to uintX_t where pssoible. 
     */
 
-    unit32_t d_ultra = 0;
-    uint32_t v_infra = 0;
-    uint32_t tilt_angle = 0;
-    for(i = 1; i <= 5, i++){
+
         //Preforms measurments and incremented average formula
-        d_ultra += (ultrasonicSensor.getDistance()-d_ultra)/i;
-        v_infra += (analogRead(A7)-v_infra)/i;
-        tilt_angle += (IMU.getTilt()-tilt_angle)/i;
-    }
+        float d_ultra = ultrasonicSensor.getDistance();
+        float v_infra = analogRead(A7);
+        float tilt_angle = IMU.getTilt();
+
 
     Serial.println("Ultrasonic sensor distance: " + String(d_ultra) + " cm");
     Serial.println("Infrared sensor measurment: " + String(v_infra) + " ?");
 
-    d_infra = measurmentToDistance(v_infra);
+    float d_infra = measurmentToDistance(v_infra);
     Serial.println("Infrared sensor distance: " + String(d_infra) + " cm");
 
     //Serial.println("Tilit angle: " + String(tilt_Angle) + "degrees");
@@ -59,11 +56,11 @@ void loop() {
     //float d_comb = SensorFusion(d_ultra_comb, d_infra_comb);
     //Serial.println("Sensor fused distance: " + String(d_comb) + " cm");
   
-    ble.writeValue(ultr_distance);
+    ble.writeValue(d_ultra);
     float other_group_distance = ble.readValue(); 
     if (other_group_distance != -1) {
         Serial.println("BLE read: " + String(other_group_distance));
     }
 
     delay(1000);
-ti}
+}

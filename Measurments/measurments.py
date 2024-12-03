@@ -33,11 +33,11 @@ white_list = np.array(df['white'].dropna().tolist())[0:a]
 blue_list = np.array(df['blue'].dropna().tolist())[0:a]
 red_list = np.array(df['red'].dropna().tolist())[0:a]
 real_list = np.array(df['real'].dropna().tolist())[0:a]
-white_transformed = [white_list,white_list**2,((1/(white_list+1.6)*1000)**2)]
+white_transformed = [white_list,white_list**2,((1/(white_list)*1000)**2)]
 white_transformed = np.array(white_transformed).T
-blue_transformed = [blue_list,blue_list**2,((1/(blue_list+1.6)*1000)**2)]
+blue_transformed = [blue_list,blue_list**2,((1/(blue_list)*1000)**2)]
 blue_transformed = np.array(blue_transformed).T
-red_transformed = [red_list,red_list**2,((1/(red_list+1.6)*1000)**2)]
+red_transformed = [red_list,red_list**2,((1/(red_list)*1000)**2)]
 red_transformed = np.array(red_transformed).T
 
 infra_model = lm.LinearRegression()
@@ -121,7 +121,10 @@ plt.scatter(white_list, real_list, label='Real')
 
 plt.plot(blue_list, infra_pred_blue, label='Infra Red Blue')
 plt.scatter(blue_list, real_list, label='Real')
+x = np.linspace(200, 1000, 100)
+y = 1.58796880e-02 * x + -1.09140410e-05 * x**2 + 6.42136562e-01 * (1 / (x + 1.6) * 1000)** 2 - 5.55773930575693
 
+plt.plot(x, y, 'k--', label='y=1.58796880e-02 * x + -1.09140410e-05 * x**2 + 6.42136562e-01 * (1 / (v_infra + 1.6) * 1000)** 2 - 5.55773930575693')
 
 plt.plot(red_list, infra_pred_red, label='Infra Red Red')
 plt.scatter(red_list, real_list, label='Real')
