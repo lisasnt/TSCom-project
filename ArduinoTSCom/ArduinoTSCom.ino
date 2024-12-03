@@ -32,7 +32,7 @@ void loop() {
 
         //Preforms measurments and incremented average formula
         float d_ultra = ultrasonicSensor.getDistance();
-        float v_infra = analogRead(A7);
+        int v_infra = analogRead(A7);
         float tilt_angle = IMU.getTilt();
 
 
