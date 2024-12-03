@@ -27,9 +27,18 @@ void BL::writeValue(float val) {
     static unsigned long lastUpdate = 0;
     static int32_t value = 0;
     unsigned long currentMillis = millis();
-    if (currentMillis - lastUpdate >= 100) { 
-        lastUpdate = currentMillis;
-        distanceCharacteristic.writeValue((int32_t)val);
+        if (currentMillis - lastUpdate >= 100) { 
+            lastUpdate = currentMillis;
+            distanceCharacteristic.writeValue((int32_t)val);
+        }
     }
+}
+
+float BL::readValue() {
+    if (BLE.connected()) {
+        if (distanceCharacteristic.written()) {
+            return distanceCharacteristic.value();
+        }
     }
+    return -1;
 }

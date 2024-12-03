@@ -27,10 +27,13 @@ void loop() {
     Serial.println("Ultrasonic sensor distance: " + String(ultr_distance) + " cm");
 
     float IMU_tilt = IMU.getTilt();
-    //Serial.println("IMU sensor tilit " + String(IMU_tilt) + "degrees");
+    Serial.println("IMU sensor tilit " + String(IMU_tilt) + " degrees");
   
     ble.writeValue(ultr_distance);
-    //Serial.println("BLE read: " + String(ble.readValue()));
+    float other_group_distance = ble.readValue(); 
+    if (other_group_distance != -1) {
+        Serial.println("BLE read: " + String(other_group_distance));
+    }
 
     delay(1000);
 }
