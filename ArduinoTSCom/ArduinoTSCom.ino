@@ -31,16 +31,19 @@ void loop() {
 
 
         //Preforms measurments and incremented average formula
-        float d_ultra = ultrasonicSensor.getDistance();
-        int v_infra = analogRead(A7);
-        float tilt_angle = IMU.getTilt();
+    float d_ultra = ultrasonicSensor.getDistance();
+    int v_infra = analogRead(A7);
+    float tilt_angle = IMU.getTilt();
 
 
     Serial.println("Ultrasonic sensor distance: " + String(d_ultra) + " cm");
-    Serial.println("Infrared sensor measurment: " + String(v_infra) + " ?");
+    Serial.println("Infrared sensor measurment: " + String(v_infra));
 
     float d_infra = measurmentToDistance(v_infra);
     Serial.println("Infrared sensor distance: " + String(d_infra) + " cm");
+
+    float d_sf = sensorFusion(d_ultra, d_infra);
+    Serial.println("Sensorfused distance: " + String(d_sf) + " cm");
 
     //Serial.println("Tilit angle: " + String(tilt_Angle) + "degrees");
 
