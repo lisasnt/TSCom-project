@@ -58,7 +58,7 @@ void UltrasonicSensor::echoHandler() {
 }
 
 float UltrasonicSensor::getDistance() {
-    static uint32_t distance;
+    static float distance;
     if (!_isEchoOn && _startTime != 0 && _endTime != 0) {
         if (_endTime >= _startTime) {
             distance = float(_endTime - _startTime) / MICROS_TO_CM;

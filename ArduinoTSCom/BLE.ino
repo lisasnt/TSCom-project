@@ -1,8 +1,4 @@
 #include "BLE.h"
-// create service:
-
-// create characteristics and allow remote device to read and get notifications:
-
 
 BL::BL(){
 
@@ -12,7 +8,7 @@ BL::~BL(){
 
 void BL::begin() {
     while(!BLE.begin()){}
-    BLE.setLocalName("Board_g40");
+    BLE.setLocalName("Board_g26");
     BLE.setAdvertisedService(Group40Service);
     Group40Service.addCharacteristic(distanceCharacteristic);
     BLE.addService(Group40Service);
