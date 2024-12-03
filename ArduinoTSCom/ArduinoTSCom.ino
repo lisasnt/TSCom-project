@@ -7,25 +7,30 @@
 
 #include "UltrasonicSensor.h"
 #include "IMUSensor.h"
+#include "BLE.h"
 
 #define ULTR_TRIG_PIN 8
 #define ULTR_ECHO_PIN 10
 
 UltrasonicSensor ultrasonicSensor(ULTR_TRIG_PIN, ULTR_ECHO_PIN);
+BL ble = BL();
 
 void setup() {
     Serial.begin(9600);
     ultrasonicSensor.begin();
     IMU.init();
-
+    ble.begin();
 }
 
 void loop() {
     float ultr_distance = ultrasonicSensor.getDistance();
-    //Serial.println("Ultrasonic sensor distance: " + String(ultr_distance) + " cm");
+    Serial.println("Ultrasonic sensor distance: " + String(ultr_distance) + " cm");
 
     float IMU_tilt = IMU.getTilt();
-    Serial.println("IMU sensor tilit " + String(IMU_tilt) + "degrees");
+    //Serial.println("IMU sensor tilit " + String(IMU_tilt) + "degrees");
+  
+    ble.writeValue(ultr_distance);
+    //Serial.println("BLE read: " + String(ble.readValue()));
 
     delay(1000);
 }
