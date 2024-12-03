@@ -1,17 +1,17 @@
 #include "SensorFusion.h"
-
+/*
 float tiltComp(distance, angle){
     //Have to assume that system is placed close to horizontaly
     return distance * cos(angle);
 }
 
 float colorDetect(v_infra, d_ultra){
-    /*
+    
         Finds the color and returns the offset corresponding to that color.
-    */
+    
 }
-
-
+*/
+/*
 float infraToDistance(v_infra, infra_treshold, d_ultra, ultra_treshold){
     if(d_ultra < d_ultra_treshold){
         Serial.print("Warning: Infrared is not calibrated correclty due to distance to object being to short.");
@@ -23,16 +23,16 @@ float infraToDistance(v_infra, infra_treshold, d_ultra, ultra_treshold){
         return measurmentToDistance(v_ultra) + colorDetect(v_infra, d_ultra);
     }
 }
-
-float measurmentToDistance(v_infra){
+*/
+float measurmentToDistance(float v_infra){
     /*
         Should transform v_infra to d_infra
     */
-    return 0;
+    return 1.58796880e-02*x + -1.09140410e-05*x**2 + 6.42136562e-01*(1/(white_list+1.6)*1000)**2 -5.55773930575693;
 }
 
-
-float SesnorFusion(d_ultra, d_infra, t_infra, t_ultra){
+/*
+float SesnorFusion(d_ultra, d_infra, t_infra=0, t_ultra=15){
     if(d_infra < t_infra){
         return d_infra
     }
@@ -47,3 +47,4 @@ float SesnorFusion(d_ultra, d_infra, t_infra, t_ultra){
         return w_infra*d_infra + w_ultra*d_ultra
     }
 }
+*/

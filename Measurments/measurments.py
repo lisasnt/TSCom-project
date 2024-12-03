@@ -8,7 +8,6 @@ from scipy.stats import sem, t
 file_path = "Measurments/test_v2.xlsx"
 df = pd.read_excel(file_path, engine='openpyxl')
 df_ultrasound = df[['ultrasound', 'real']]
-print(df_ultrasound)
 df_ultrasound = df_ultrasound.dropna()
 ultrasound_dict = df_ultrasound.groupby('real')['ultrasound'].apply(list).to_dict()
 
@@ -16,7 +15,6 @@ for key in ultrasound_dict:
     l = ultrasound_dict[key]
     ultrasound_dict[key] = [x - 1.6 for x in l]
     
-print(ultrasound_dict)
 
 '''
 df_infrared_red = df[['red', 'real']]
@@ -46,12 +44,18 @@ infra_model = lm.LinearRegression()
 
 infra_model.fit(white_transformed, real_list)
 infra_pred_white = infra_model.predict(white_transformed)
+print("White: ", infra_model.coef_)
+print("White: ", infra_model.intercept_)
 
 infra_model.fit(blue_transformed, real_list)
 infra_pred_blue = infra_model.predict(blue_transformed)
+print("Blue: ", infra_model.coef_)
+print("Blue: ", infra_model.intercept_)
 
 infra_model.fit(red_transformed, real_list)
 infra_pred_red = infra_model.predict(red_transformed)
+print("Red: ", infra_model.coef_)
+print("Red: ", infra_model.intercept_)
 
 def to_dict(values, measurements):
     result_dict = {}
@@ -113,14 +117,15 @@ plt.show()
 
 plt.plot(white_list, infra_pred_white, label='Infra Red White')
 plt.scatter(white_list, real_list, label='Real')
-plt.show()
+
 
 plt.plot(blue_list, infra_pred_blue, label='Infra Red Blue')
 plt.scatter(blue_list, real_list, label='Real')
-plt.show()
+
 
 plt.plot(red_list, infra_pred_red, label='Infra Red Red')
 plt.scatter(red_list, real_list, label='Real')
+plt.legend()
 plt.show()
     
 
