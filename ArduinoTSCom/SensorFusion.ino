@@ -31,8 +31,19 @@ float measurmentToDistance(v_infra){
     return 0;
 }
 
-float distanceComb(d_ultra, d_infra){
-    /*
-        Preform sesnor fusion on the data, probably gonna use weighted average of some sort.
-    */
+
+float SesnorFusion(d_ultra, d_infra, t_infra, t_ultra){
+    if(d_infra < t_infra){
+        return d_infra
+    }
+    else if(d_infra > t_ultra){
+        return d_ultra
+    }
+    else{
+        //Preforms weighted average for regions bewteen areas where one sensor dominates
+        //w_infra and w_ultra are between 0 and 1
+        w_infra = -1/(t_infra-t_ultra)*d_infra + 1/(t_infra-t_ultra)*t_infra
+        w_ultra = 1-w_infra
+        return w_infra*d_infra + w_ultra*d_ultra
+    }
 }
