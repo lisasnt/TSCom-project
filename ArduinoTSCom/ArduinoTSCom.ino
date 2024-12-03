@@ -7,6 +7,7 @@
 
 #include "UltrasonicSensor.h"
 #include "IMUSensor.h"
+#include "SensorFusion.h"
 #include "BLE.h"
 
 #define ULTR_TRIG_PIN 8
@@ -36,4 +37,4 @@ void loop() {
     }
 
     delay(1000);
-}
+ti}
