@@ -24,11 +24,36 @@ void setup() {
 }
 
 void loop() {
-    float ultr_distance = ultrasonicSensor.getDistance();
-    Serial.println("Ultrasonic sensor distance: " + String(ultr_distance) + " cm");
 
-    float IMU_tilt = IMU.getTilt();
-    Serial.println("IMU sensor tilit " + String(IMU_tilt) + " degrees");
+    /*
+        Many of the functions bellow return floats, should be changed to uintX_t where pssoible. 
+    */
+
+    unit32_t d_ultra = 0;
+    uint32_t v_infra = 0;
+    uint32_t tilt_angle = 0;
+    for(i = 1; i <= 5, i++){
+        //Preforms measurments and incremented average formula
+        d_ultra += (ultrasonicSensor.getDistance()-d_ultra)/i;
+        v_infra += (analogRead(A7)-v_infra)/i;
+        tilt_angle += (IMU.getTilt()-tilt_angle)/i;
+    }
+
+    Serial.println("Ultrasonic sensor distance: " + String(d_ultra) + " cm");
+    Serial.println("Infrared sensor measurment: " + String(v_infra) + " ?");
+    Serial.println("Tilit angle: " + String(tilt_Angle) + "degrees");
+
+    float d_ultra_comp = tiltComp(d_ultra, tilt_Angle);
+    Serial.println("Angle compensated ultrasonic distance: " + String(d_ultra_comp) + " cm");
+
+    //float d_infra = infraToDistance(v_infra, infra_treshold, d_ultra_comp, ultra_treshold);
+    //Serial.println("Infrared sensor distance: " + String(d_infra) + " cm");
+
+    //float d_infra_comp = tilitComp(d_infra, tilt_Angle);
+    //Serial.println("Angle compensated infrared distance: " + String(d_infra_comp) + " cm");
+
+    //float d_comb = SensorFusion(d_ultra_comb, d_infra_comb);
+    //Serial.println("Sensor fused distance: " + String(d_comb) + " cm");
   
     ble.writeValue(ultr_distance);
     float other_group_distance = ble.readValue(); 
