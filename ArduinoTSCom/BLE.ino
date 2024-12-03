@@ -3,8 +3,6 @@
 BL::BL(){
 
 }
-BL::~BL(){
-}
 
 void BL::begin() {
     while(!BLE.begin()){}

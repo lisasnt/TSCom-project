@@ -11,7 +11,6 @@ BLEIntCharacteristic distanceCharacteristic(UUID, BLERead | BLEWrite);
 class BL{
 public:
     BL();
-    ~BL();
     void begin();
     void writeValue(float);
     float readValue();
