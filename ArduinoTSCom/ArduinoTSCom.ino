@@ -41,10 +41,10 @@ void loop() {
 
     Serial.println("Ultrasonic sensor distance: " + String(d_ultra) + " cm");
     Serial.println("Infrared sensor measurment: " + String(v_infra) + " ?");
-    Serial.println("Tilit angle: " + String(tilt_Angle) + "degrees");
+    //Serial.println("Tilit angle: " + String(tilt_Angle) + "degrees");
 
-    float d_ultra_comp = tiltComp(d_ultra, tilt_Angle);
-    Serial.println("Angle compensated ultrasonic distance: " + String(d_ultra_comp) + " cm");
+    //float d_ultra_comp = tiltComp(d_ultra, tilt_Angle);
+    //Serial.println("Angle compensated ultrasonic distance: " + String(d_ultra_comp) + " cm");
 
     //float d_infra = infraToDistance(v_infra, infra_treshold, d_ultra_comp, ultra_treshold);
     //Serial.println("Infrared sensor distance: " + String(d_infra) + " cm");
