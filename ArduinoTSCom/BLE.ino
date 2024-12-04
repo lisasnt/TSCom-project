@@ -13,7 +13,7 @@ void BL::begin() {
     BLE.advertise();
 }
 
-void BL::writeValue(float val) {
+void BL::writeValue(uint32_t val) {
     BLE.poll();
 
     // if a central is connected to the peripheral:
@@ -28,11 +28,11 @@ void BL::writeValue(float val) {
     }
 }
 
-float BL::readValue() {
+uint32_t BL::readValue() {
     if (BLE.connected()) {
         if (distanceCharacteristic.written()) {
             return distanceCharacteristic.value();
         }
     }
-    return -1;
+    return 0;
 }

@@ -1,14 +1,11 @@
-#pragma once
-#include "math.h"
-//float tiltComp(distance, angle);
+#ifndef SENSOR_FUSION_H
+#define SENSOR_FUSION_H
 
+#define T_INFRA     7.5
+#define T_ULTRA     14.5
+#define DEG_TO_RAD  0.0174533 
 
-//Should find out what color is most likely to be reflecting. 
-
-//float colorComp(v_infra, d_ultra);
-//float infraToDistance(v_infra, infra_treshold, d_ultra, ultra_treshold);
-float measurmentToDistance(float v_ultra);
 float sensorFusion(float d_ultra, float d_infra);
-//float distanceComb(d_ultra, d_infra);
+float tiltComp(float distance, float angle);
 
-
+#endif

@@ -15,9 +15,17 @@
 #define ULTR_ECHO_PIN 10
 #define IR_SENSOR     A7 
 
+#define N_SAMPLES   4
+
+#define WHITE_WALL
+//#define BLUE_WALL
+//#define RED_WALL
+
 UltrasonicSensor ultrasonicSensor(ULTR_TRIG_PIN, ULTR_ECHO_PIN);
 BL ble = BL();
 InfraRedSensor irSensor(IR_SENSOR);
+
+uint8_t cnt = N_SAMPLES;
 
 void setup() {
     Serial.begin(9600);
@@ -27,46 +35,41 @@ void setup() {
 }
 
 void loop() {
+    float sum_ir_distaces, sum_tilt_angles;
+    
+    uint32_t avg_ultr_distance = ultrasonicSensor.getAvarageDistance();
+    while(cnt) {
+        #ifdef WHITE_WALL
+        sum_ir_distaces += irSensor.getDistanceWhite(irSensor.getADCValue());
+        #endif
+        #ifdef BLUE_WALL
+        sum_ir_distaces += irSensor.getDistanceBlue(irSensor.getADCValue());
+        #endif
+        #ifdef RED_WALL
+        sum_ir_distaces += irSensor.getDistanceRed(irSensor.getADCValue());
+        #endif
+        sum_tilt_angles += IMU.getTilt();
+        cnt--;
+    }
+    cnt = N_SAMPLES;
 
-    /*
-        Many of the functions bellow return floats, should be changed to uintX_t where pssoible. 
-    */
+    float avg_ir_distance = sum_ir_distaces / N_SAMPLES;    
+    float tilt_angle = sum_tilt_angles / N_SAMPLES;
 
+    //float final_value = sensorFusion(tiltComp(avg_ultr_distance, tilt_angle), tiltComp(avg_ir_distance, tilt_angle));
+    float final_value = sensorFusion(avg_ultr_distance, avg_ir_distance);
 
-        //Preforms measurments and incremented average formula
-    float d_ultra = ultrasonicSensor.getDistance();
-    int v_infra = analogRead(A7);
-    float tilt_angle = IMU.getTilt();
+    //Serial.println("Ultrasonic sensor avg distance: " + String(avg_ultr_distance) + " mm*e-1");
+    //Serial.println("Infrared sensor measurment: " + String(avg_ir_distance) + " mm*e-1");
+    //Serial.println("Tilt angle = " + String(IMU.getTilt()) + " °");
+    Serial.println("Estimated distance = " + String(final_value) + " mm*e-1");
 
-
-    Serial.println("Ultrasonic sensor distance: " + String(d_ultra) + " cm");
-    Serial.println("Infrared sensor measurment: " + String(v_infra));
-
-    float d_infra = measurmentToDistance(v_infra);
-    Serial.println("Infrared sensor distance: " + String(d_infra) + " cm");
-
-    float d_sf = sensorFusion(d_ultra, d_infra);
-    Serial.println("Sensorfused distance: " + String(d_sf) + " cm");
-
-    //Serial.println("Tilit angle: " + String(tilt_Angle) + "degrees");
-
-    //float d_ultra_comp = tiltComp(d_ultra, tilt_Angle);
-    //Serial.println("Angle compensated ultrasonic distance: " + String(d_ultra_comp) + " cm");
-
-    //float d_infra = infraToDistance(v_infra, infra_treshold, d_ultra_comp, ultra_treshold);
-    //Serial.println("Infrared sensor distance: " + String(d_infra) + " cm");
-
-    //float d_infra_comp = tilitComp(d_infra, tilt_Angle);
-    //Serial.println("Angle compensated infrared distance: " + String(d_infra_comp) + " cm");
-
-    //float d_comb = SensorFusion(d_ultra_comb, d_infra_comb);
-    //Serial.println("Sensor fused distance: " + String(d_comb) + " cm");
-  
-    ble.writeValue(d_ultra);
+   
+    // BLE implementation
+    ble.writeValue((uint32_t)final_value);
     float other_group_distance = ble.readValue(); 
-    if (other_group_distance != -1) {
+    if (other_group_distance != 0) {
         Serial.println("BLE read: " + String(other_group_distance));
     }
-
     delay(1000);
 }

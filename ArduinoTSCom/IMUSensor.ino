@@ -107,13 +107,8 @@ int LSM9DS1Class::readRegister(uint8_t slaveAddress, uint8_t address)
 
 void LSM9DS1Class::init(){
     if (!IMU.begin()) {
-        Serial.println("Failed to initialize IMU!");
         while (1);
     }
-
-    Serial.print("Accelerometer sample rate = ");
-    Serial.print(IMU.accelerationSampleRate());
-    Serial.println(" Hz");
 }
 
 float LSM9DS1Class::getTilt(){
@@ -129,7 +124,6 @@ float LSM9DS1Class::getTilt(){
         previousMillis = currentMillis;
 
         IMU.readAcceleration(x, y, z);
-
         // Calculate tilt angles in degrees
         angleY = atan2(y, sqrt(x * x + z * z)) * 180 / PI;
 

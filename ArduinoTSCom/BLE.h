@@ -12,8 +12,8 @@ class BL{
 public:
     BL();
     void begin();
-    void writeValue(float);
-    float readValue();
+    void writeValue(uint32_t);
+    uint32_t readValue();
 };
 
 #endif

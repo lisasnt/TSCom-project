@@ -3,6 +3,8 @@
 volatile bool UltrasonicSensor::_isEchoOn = false;
 volatile uint32_t UltrasonicSensor::_startTime = 0;
 volatile uint32_t UltrasonicSensor::_endTime = 0;
+volatile uint32_t UltrasonicSensor::_samples[DIM_SAMPLES] = {0,0,0,0};
+volatile uint8_t  UltrasonicSensor::_sampleIndex = 0;
 volatile bool UltrasonicSensor::_isFirstToggleDone = false;
 volatile bool UltrasonicSensor::_toggle0 = true;
 UltrasonicSensor* UltrasonicSensor::instance = nullptr;
@@ -53,20 +55,37 @@ void UltrasonicSensor::echoHandler() {
         _isEchoOn = true;
     } else if (_isEchoOn) {
         _endTime = micros();
-        _isEchoOn = false;
+        _isEchoOn = false; 
+        _samples[_sampleIndex++] = _endTime - _startTime;
+        if(_sampleIndex == DIM_SAMPLES) { 
+            _sampleIndex = 0;
+        }
     }
 }
 
-float UltrasonicSensor::getDistance() {
-    static float distance;
+uint32_t UltrasonicSensor::getDistance() {
+    static uint32_t distance;
     if (!_isEchoOn && _startTime != 0 && _endTime != 0) {
         if (_endTime >= _startTime) {
-            distance = float(_endTime - _startTime) / MICROS_TO_CM;
+            distance = (_endTime - _startTime) / MICROS_TO_CM * CM_TO_MMe_1;
         } else { //deal overflow of micros()
-            distance = float(4294967295UL - _startTime + _endTime) / MICROS_TO_CM; 
+            distance = (4294967295UL - _startTime + _endTime) / MICROS_TO_CM * CM_TO_MMe_1; 
         }
         _startTime = 0;
         _endTime = 0;
     }
+    return distance;    
+}
+
+uint32_t UltrasonicSensor::getAvarageDistance() {
+    static uint32_t distance;
+        uint32_t avarage = 0;
+            for (uint8_t i = 0; i < DIM_SAMPLES; i++) {
+                avarage += _samples[i];
+            }
+            distance = (avarage / DIM_SAMPLES) / MICROS_TO_CM * CM_TO_MMe_1;
+        _startTime = 0;
+        _endTime = 0;
+    //}
     return distance;    
 }
