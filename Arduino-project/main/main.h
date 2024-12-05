@@ -23,7 +23,7 @@
 #define DEG_TO_RAD  0.0174533 
 
 /*
-*    Sensor fusion functions    
+*    Sensor Fusion functions  
 */
 float sensorFusion(float ultr_measurement, float ir_measurement);
 float tiltCompensation(float distance, float angle);

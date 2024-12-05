@@ -1,6 +1,3 @@
-/*
-    Lots of inspiration taken from https://github.com/arduino-libraries/Arduino_LSM9DS1.git
-*/
 #ifndef IMUSENSOR_H
 #define IMUSENSOR_H
 

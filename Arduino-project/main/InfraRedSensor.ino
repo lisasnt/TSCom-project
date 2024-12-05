@@ -44,9 +44,12 @@ float InfraRedSensor::getDistanceRed(uint32_t analogValue){
 
 
 
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> olderIMUstuff
