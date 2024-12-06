@@ -24,7 +24,6 @@ void setup() {
 
 void loop() {
     float sum_ir_distaces = 0; 
-    //float sum_tilt_angles = 0; /* imu avarage does not work! */
     float avg_ultr_distance = ultrasonicSensor.getAvarageDistance();
     while(cnt) {
         #ifdef WHITE_WALL
@@ -36,19 +35,18 @@ void loop() {
         #ifdef RED_WALL
         sum_ir_distaces += irSensor.getDistanceRed(irSensor.getADCValue());
         #endif
-        //sum_tilt_angles += IMU.getTilt();  /* imu avarage does not work! */
         cnt--;                             
     }
     cnt = N_SAMPLES;  
 
     // Calculate final averages
-    float avg_ir_distance = sum_ir_distaces / N_SAMPLES;    
-    //float tilt_angle = sum_tilt_angles / N_SAMPLES; /* imu avarage does not work! */
-    //Serial.println("Tilt angle = " + String(tilt_angle) + " °"); /* imu avarage does not work! */
+    float avg_ir_distance = sum_ir_distaces / N_SAMPLES;
 
     float IMU_tilt = IMU.getTilt();
     Serial.println("IMU sensor tilt " + String(IMU_tilt) + " °");
-    //float final_value2 = sensorFusionSimplified(tiltCompensation(avg_ultr_distance, IMU_tilt), tiltCompensation(avg_ir_distance, IMU_tilt));
+    Serial.println("Ultrasonic sensor measurement = " + String(avg_ultr_distance) + " mm*e-1");
+    Serial.println("Infrared sensor measurement = " + String(avg_ir_distance) + " mm*e-1");
+
     float final_value = sensorFusion(tiltCompensation(avg_ultr_distance, IMU_tilt), tiltCompensation(avg_ir_distance, IMU_tilt));
     Serial.println("Estimated distance = " + String(final_value) + " mm*e-1");
 
@@ -59,6 +57,7 @@ void loop() {
         Serial.println("BLE reads : " + String(other_group_distance));
     }
 
+    Serial.println("================================================");
     delay(1000);
 }
 
