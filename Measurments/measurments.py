@@ -5,7 +5,7 @@ import sklearn.linear_model as lm
 from scipy.stats import sem, t
 
 
-file_path = "Measurments/test_v2.xlsx"
+file_path = "Measurments/Data.xlsx"
 df = pd.read_excel(file_path, engine='openpyxl')
 df_ultrasound = df[['ultrasound', 'real']]
 df_ultrasound = df_ultrasound.dropna()
@@ -15,19 +15,6 @@ for key in ultrasound_dict:
     l = ultrasound_dict[key]
     ultrasound_dict[key] = [x - 1.6 for x in l]
     
-
-'''
-df_infrared_red = df[['red', 'real']]
-df_infrared_red = df_infrared_red.dropna()
-df_infrared_white = df[['white', 'real']]
-df_infrared_white = df_infrared_white.dropna()
-df_infrared_blue = df[['blue', 'real']]
-df_infrared_blue = df_infrared_blue.dropna()
-
-infrared_red_dict = df_infrared_red.groupby('real')['red'].apply(list).to_dict()
-infrared_white_dict = df_infrared_white.groupby('real')['white'].apply(list).to_dict()
-infrared_blue_dict = df_infrared_blue.groupby('real')['blue'].apply(list).to_dict()
-'''
 a = 90
 white_list = np.array(df['white'].dropna().tolist())[0:a]
 blue_list = np.array(df['blue'].dropna().tolist())[0:a]
@@ -108,7 +95,7 @@ plt.errorbar(keys_infrared_blue, means_infrared_blue, yerr=cis_infrared_blue, fm
 
 x = np.linspace(0, 100, 100)
 y = x
-plt.plot(x, y, 'k--', label='y=x')
+plt.plot(x, y, 'k--', label='y=x (Ideal Line)')
 
 plt.legend()
 plt.show()
@@ -124,135 +111,9 @@ plt.scatter(blue_list, real_list, label='Real')
 x = np.linspace(200, 1000, 100)
 y = 1.58796880e-02 * x + -1.09140410e-05 * x**2 + 6.42136562e-01 * (1 / (x + 1.6) * 1000)** 2 - 5.55773930575693
 
-plt.plot(x, y, 'k--', label='y=1.58796880e-02 * x + -1.09140410e-05 * x**2 + 6.42136562e-01 * (1 / (v_infra + 1.6) * 1000)** 2 - 5.55773930575693')
+plt.plot(x, y, 'k--', label='Regression Line')
 
 plt.plot(red_list, infra_pred_red, label='Infra Red Red')
 plt.scatter(red_list, real_list, label='Real')
 plt.legend()
 plt.show()
-    
-
-'''
-#Do this for each coulmn
-valid_data = df['A'].dropna().tolist()
-
-#Infrared
-infra_model = lm.LinearRegression()
-
-XW_green = [infra_red_green,((1/(infra_red_green+1.6)*1000)**2)]
-XW_green = np.array(XW_green).T
-infra_model.fit(XW_green, real_distance_green)
-infra_pred_green = infra_model.predict(XW_green)
-
-XW_white = [infra_red_white,((1/(infra_red_white+1.6)*1000)**2)]
-XW_white = np.array(XW_white).T
-infra_model.fit(XW_white, real_distance_white)
-infra_pred_white = infra_model.predict(XW_white)
-
-XW_black = [infra_red_black,((1/(infra_red_black+1.6)*1000)**2)]
-XW_black = np.array(XW_black).T
-infra_model.fit(XW_black, real_distance_black)
-infra_pred_black = infra_model.predict(XW_black)
-
-
-
-
-#ultrasonic
-ultra_model = lm.LinearRegression()
-ultra_model.fit(ultra_sound, real_distance)
-ultra_pred = ultra_model.predict(ultra_sound)
-ultra_error = (real_distance - ultra_pred)**2
-
-
-print(df)
-df = df.dropna(how='all').reset_index(drop=True)
-print(df)
-#White
-ultra_sound_white = np.array(df.iloc[:, 0].tolist())
-infra_red_white = np.array(df.iloc[:, 1].tolist())
-real_distance_white = np.array(df.iloc[:, 2].tolist())
-
-#Green
-ultra_sound_green = np.array(df.iloc[:, 3].tolist())
-infra_red_green = np.array(df.iloc[:, 4].tolist())
-real_distance_green = np.array(df.iloc[:, 5].tolist())
-
-#Black
-ultra_sound_black = np.array(df.iloc[:, 6].tolist())
-infra_red_black = np.array(df.iloc[:, 7].tolist())
-real_distance_black = np.array(df.iloc[:, 8].tolist())
- 
-#concatenate the data
-ultra_sound = ultra_sound_white + ultra_sound_green + ultra_sound_black
-ultra_sound = np.array(ultra_sound).reshape(-1, 1)
-real_distance = np.array(real_distance_white + real_distance_green + real_distance_black) 
-   
-#Remove NAN values
-infra_red_green = infra_red_green[~np.isnan(real_distance_green)]
-infra_red_white = infra_red_white[~np.isnan(real_distance_white)]
-infra_red_black = infra_red_black[~np.isnan(real_distance_black)]
-real_distance_green = real_distance_green[~np.isnan(real_distance_green)]
-real_distance_white = real_distance_white[~np.isnan(real_distance_white)]
-real_distance_black = real_distance_black[~np.isnan(real_distance_black)]
-ultra_sound = ultra_sound[~np.isnan(real_distance)]
-real_distance = real_distance[~np.isnan(real_distance)]
- 
-
-
-infra_model = lm.LinearRegression()
-XW_green = [infra_red_green,((1/(infra_red_green+1.6)*1000)**2)]
-XW_green = np.array(XW_green).T
-infra_model.fit(XW_green, real_distance_green)
-infra_pred_green = infra_model.predict(XW_green)
-infra_error_green = (real_distance_green - infra_pred_green)**2
-
-XW_white = [infra_red_white,((1/(infra_red_white+1.6)*1000)**2)]
-XW_white = np.array(XW_white).T
-infra_model.fit(XW_white, real_distance_white)
-infra_pred_white = infra_model.predict(XW_white)
-infra_error_white = (real_distance_white - infra_pred_white)**2
-
-XW_black = [infra_red_black,((1/(infra_red_black+1.6)*1000)**2)]
-XW_black = np.array(XW_black).T
-infra_model.fit(XW_black, real_distance_black)
-infra_pred_black = infra_model.predict(XW_black)
-infra_error_black = (real_distance_black - infra_pred_black)**2
-
-plt.plot(real_distance, ultra_sound, 'ro', label='Ultra Sound')
-plt.plot(real_distance_green, infra_pred_green, 'go', label='Infra Red Green')
-plt.plot(real_distance_white, infra_pred_white, 'bo', label='Infra Red White')
-plt.plot(real_distance_black, infra_pred_black, 'yo', label='Infra Red Black')
-plt.xlabel('Real Distance')
-plt.ylabel('Sensor Reading')
-plt.legend()
-plt.show()  
-
-
-plt.plot(real_distance, ultra_pred, 'ro', label='Ultra Sound')
-plt.plot(real_distance_white, infra_error_white, 'bo', label='Infra Red White')
-plt.plot(real_distance_green, infra_error_green, 'go', label='Infra Red Green')
-plt.plot(real_distance_black, infra_error_black, 'yo', label='Infra Red Black')
-plt.xlabel('Real Distance')
-plt.ylabel('Error')
-plt.legend()
-plt.show()
-
-
-def get_error(real_distance, pred_distance):
-    for i in range(len(real_distance)):
-        np.coun
-        real_distance_i = real_distance[i]
-        for j in range(i*5, i*5+5):
-            print(j)
-            errors = np.append(errors, (real_distance_i - pred_distance[j])**2)             
-    return errors
-
-print(get_error(real_distance, ultra_pred))
-'''
-
-
-
-
-
-
-
